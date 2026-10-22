@@ -1,0 +1,1004 @@
+
+<!DOCTYPE html>
+<html lang="en" ng-app="melodyBeatsApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melody Beats | Experiment 9</title>
+
+    <!-- AngularJS and AngularJS Routing -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #faf7ff;
+            color: #302440;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #241438;
+            color: white;
+            padding: 14px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #e4c0ff;
+            text-decoration: none;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .brand img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #e4c0ff;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #241438, #583483, #8052b5);
+            color: white;
+            text-align: center;
+            padding: 65px 22px;
+        }
+
+        .eyebrow {
+            color: #e4c0ff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 {
+            font-size: clamp(35px, 6vw, 58px);
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            max-width: 680px;
+            margin: 0 auto 22px;
+            color: #f1e8ff;
+        }
+
+        .button {
+            display: inline-block;
+            border: none;
+            border-radius: 7px;
+            padding: 11px 19px;
+            background: #613b91;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .button:hover {
+            background: #40225f;
+        }
+
+        .button-light {
+            background: #e4c0ff;
+            color: #241438;
+        }
+
+        .button-light:hover {
+            background: #d3a1f4;
+        }
+
+        .button:disabled {
+            background: #b9b2c2;
+            color: #ffffff;
+            cursor: not-allowed;
+        }
+
+        .section {
+            max-width: 1100px;
+            margin: auto;
+            padding: 48px 22px;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .section-heading h2 {
+            color: #583483;
+            font-size: clamp(27px, 4vw, 36px);
+            margin-bottom: 8px;
+        }
+
+        .section-heading p {
+            color: #756b81;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid #e5d9f2;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 5px 20px #38234b0d;
+        }
+
+        .panel h3 {
+            color: #583483;
+            margin-bottom: 8px;
+        }
+
+        .panel p {
+            color: #756b81;
+        }
+
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .music-card {
+            background: white;
+            border: 1px solid #e5d9f2;
+            border-radius: 13px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .music-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .music-card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .music-card-content {
+            padding: 18px;
+        }
+
+        .music-card h3 {
+            color: #583483;
+            margin-bottom: 6px;
+        }
+
+        .music-card p {
+            color: #756b81;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .soft-background {
+            background: #f0e8fc;
+        }
+
+        .form-layout {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .form-intro {
+            background: #241438;
+            color: white;
+            padding: 28px;
+            border-radius: 14px;
+        }
+
+        .form-intro h2 {
+            font-size: 29px;
+            margin-bottom: 14px;
+        }
+
+        .form-intro p {
+            color: #e4d8f2;
+            margin-bottom: 15px;
+        }
+
+        .form-intro img {
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .form-panel {
+            background: white;
+            border: 1px solid #e5d9f2;
+            border-radius: 14px;
+            padding: 25px;
+        }
+
+        .form-panel h2 {
+            color: #583483;
+            margin-bottom: 5px;
+        }
+
+        .form-description {
+            color: #756b81;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            font-size: 14px;
+            margin: 12px 0 5px;
+        }
+
+        .required {
+            color: #c22d55;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d8c9e9;
+            border-radius: 7px;
+            font: inherit;
+            font-size: 14px;
+            background: white;
+            color: #302440;
+        }
+
+        input:focus,
+        select:focus {
+            outline: 2px solid #c3a2e9;
+            border-color: #613b91;
+        }
+
+        input.invalid,
+        select.invalid {
+            border-color: #c22d55;
+            background: #fff9fb;
+        }
+
+        .gender-options {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+            margin-top: 7px;
+        }
+
+        .gender-options label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin: 0;
+            font-weight: normal;
+        }
+
+        .gender-options input {
+            width: auto;
+        }
+
+        .error-message {
+            color: #c22d55;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .help-text {
+            color: #756b81;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .form-actions {
+            margin-top: 20px;
+        }
+
+        .success-message {
+            background: #e5f7eb;
+            color: #216a3c;
+            border: 1px solid #b9e6c7;
+            border-radius: 8px;
+            padding: 13px;
+            margin-top: 17px;
+        }
+
+        .page-banner {
+            padding: 55px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .page-banner h1 {
+            font-size: clamp(32px, 5vw, 48px);
+            margin-bottom: 10px;
+        }
+
+        .page-banner p {
+            max-width: 650px;
+            margin: auto;
+        }
+
+        .red-banner {
+            background: linear-gradient(135deg, #721c35, #d64563);
+        }
+
+        .green-banner {
+            background: linear-gradient(135deg, #155c45, #39a77b);
+        }
+
+        .blue-banner {
+            background: linear-gradient(135deg, #183a73, #4c83d2);
+        }
+
+        .page-content {
+            max-width: 1000px;
+            margin: auto;
+            padding: 40px 22px;
+        }
+
+        .page-content h2 {
+            color: #583483;
+            margin-bottom: 12px;
+        }
+
+        .page-content p {
+            margin-bottom: 14px;
+            color: #756b81;
+        }
+
+        .page-image {
+            width: 100%;
+            max-height: 370px;
+            object-fit: cover;
+            border-radius: 13px;
+            margin: 15px 0 22px;
+        }
+
+        .page-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .closing {
+            background: #241438;
+            color: white;
+            padding: 35px 20px;
+            text-align: center;
+            border-radius: 14px;
+        }
+
+        .closing h2 {
+            margin-bottom: 10px;
+        }
+
+        .closing p {
+            color: #e4d8f2;
+            margin-bottom: 18px;
+        }
+
+        footer {
+            background: #241438;
+            color: white;
+            text-align: center;
+            padding: 26px 15px;
+        }
+
+        footer p {
+            color: #e4d8f2;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 800px) {
+            header {
+                justify-content: center;
+            }
+
+            nav {
+                justify-content: center;
+            }
+
+            .music-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .form-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .music-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 35px 15px;
+            }
+
+            .form-panel,
+            .panel {
+                padding: 18px;
+            }
+
+            .gender-options {
+                gap: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Website Header and Navigation -->
+    <header>
+        <a class="brand" href="#!/">
+            <img src="logo.jpg" alt="Melody Beats Logo">
+            <span>♫ Melody Beats</span>
+        </a>
+
+        <nav>
+            <a href="#!/">Home</a>
+            <a href="#!/register">Join Us</a>
+            <a href="#!/red">Rock</a>
+            <a href="#!/green">Acoustic</a>
+            <a href="#!/blue">Concerts</a>
+        </nav>
+    </header>
+
+    <!-- AngularJS displays the selected route here -->
+    <main ng-view></main>
+
+    <!-- HOME PAGE TEMPLATE -->
+    <script type="text/ng-template" id="home.html">
+
+        <section class="hero">
+            <div class="eyebrow">Music • Creativity • Memories</div>
+            <h1>Feel the Music.<br>Live the Moment.</h1>
+            <p>
+                Welcome to Melody Beats, a music band website
+                created for people who love music, live performances
+                and unforgettable memories.
+            </p>
+            <a href="#!/register" class="button button-light">
+                Join Our Community
+            </a>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <h2>Discover Melody Beats</h2>
+                <p>
+                    Explore our music, performances and the different
+                    experiences we bring to our audience.
+                </p>
+            </div>
+
+            <div class="music-grid">
+
+                <article class="music-card">
+                    <img src="band.jpg" alt="Melody Beats Band">
+                    <div class="music-card-content">
+                        <h3>Our Band</h3>
+                        <p>
+                            Meet the spirit of our band and discover
+                            the passion behind our music.
+                        </p>
+                        <a href="#!/red" class="button">Explore Rock</a>
+                    </div>
+                </article>
+
+                <article class="music-card">
+                    <img src="guitar.webp" alt="Guitar Music">
+                    <div class="music-card-content">
+                        <h3>Acoustic Music</h3>
+                        <p>
+                            Enjoy expressive melodies, guitar music
+                            and peaceful acoustic sounds.
+                        </p>
+                        <a href="#!/green" class="button">Explore Acoustic</a>
+                    </div>
+                </article>
+
+                <article class="music-card">
+                    <img src="concert.jpg" alt="Live Music Concert">
+                    <div class="music-card-content">
+                        <h3>Live Concerts</h3>
+                        <p>
+                            Experience the excitement of live music
+                            and the energy of the audience.
+                        </p>
+                        <a href="#!/blue" class="button">Explore Concerts</a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <section class="soft-background">
+            <div class="section">
+                <div class="section-heading">
+                    <h2>Music Brings Us Together</h2>
+                    <p>
+                        Every melody tells a story. Every performance
+                        creates a memory.
+                    </p>
+                </div>
+
+                <div class="panel">
+                    <h3>Become Part of Our Community</h3>
+                    <p>
+                        Register with Melody Beats to complete the
+                        user registration form. The form checks your
+                        details before allowing submission.
+                    </p>
+                    <br>
+                    <a href="#!/register" class="button">
+                        Register Now
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="closing">
+                <h2>Every Great Memory Starts With a Song.</h2>
+                <p>Explore the music. Discover your rhythm.</p>
+                <a href="#!/register" class="button button-light">
+                    Join Melody Beats
+                </a>
+            </div>
+        </section>
+
+    </script>
+
+    <!-- REGISTRATION PAGE TEMPLATE -->
+    <script type="text/ng-template" id="register.html">
+
+        <section class="section">
+            <div class="section-heading">
+                <div class="eyebrow" style="color:#613b91">
+                    Become a Member
+                </div>
+                <h2>User Registration</h2>
+                <p>
+                    Enter your details. All fields must be valid
+                    before you can submit the form.
+                </p>
+            </div>
+
+            <div class="form-layout" ng-controller="RegistrationController">
+
+                <div class="form-intro">
+                    <h2>Join Melody Beats</h2>
+                    <p>
+                        Be part of our music community and celebrate
+                        your love for music.
+                    </p>
+                    <p>
+                        Please provide correct information in every
+                        required field.
+                    </p>
+                    <img src="band.jpg" alt="Melody Beats Music Band">
+                </div>
+
+                <div class="form-panel">
+                    <h2>Create Your Account</h2>
+                    <p class="form-description">
+                        Fields marked with * are required.
+                    </p>
+
+                    <form name="registrationForm"
+                          ng-submit="submitRegistration(registrationForm)"
+                          novalidate>
+
+                        <!-- Name -->
+                        <label for="userName">
+                            Name <span class="required">*</span>
+                        </label>
+                        <input
+                            id="userName"
+                            name="userName"
+                            type="text"
+                            ng-model="user.name"
+                            ng-pattern="/^[A-Za-z ]+$/"
+                            ng-class="{'invalid': registrationForm.userName.$touched && registrationForm.userName.$invalid}"
+                            placeholder="Enter your full name"
+                            required
+                        >
+
+                        <div class="error-message"
+                             ng-show="registrationForm.userName.$touched && registrationForm.userName.$error.required">
+                            Name is required.
+                        </div>
+                        <div class="error-message"
+                             ng-show="registrationForm.userName.$touched && registrationForm.userName.$error.pattern">
+                            Name must contain letters and spaces only. Numbers are not allowed.
+                        </div>
+
+                        <!-- Password -->
+                        <label for="userPassword">
+                            Password <span class="required">*</span>
+                        </label>
+                        <input
+                            id="userPassword"
+                            name="userPassword"
+                            type="password"
+                            ng-model="user.password"
+                            ng-pattern="/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}$/"
+                            ng-class="{'invalid': registrationForm.userPassword.$touched && registrationForm.userPassword.$invalid}"
+                            placeholder="Create a password"
+                            required
+                        >
+
+                        <p class="help-text">
+                            Minimum 8 characters, including uppercase,
+                            lowercase and a number.
+                        </p>
+
+                        <div class="error-message"
+                             ng-show="registrationForm.userPassword.$touched && registrationForm.userPassword.$error.required">
+                            Password is required.
+                        </div>
+                        <div class="error-message"
+                             ng-show="registrationForm.userPassword.$touched && registrationForm.userPassword.$error.pattern">
+                            Password must contain an uppercase letter, a lowercase letter, a number and at least 8 characters.
+                        </div>
+
+                        <!-- Age -->
+                        <label for="userAge">
+                            Age <span class="required">*</span>
+                        </label>
+                        <input
+                            id="userAge"
+                            name="userAge"
+                            type="number"
+                            ng-model="user.age"
+                            min="18"
+                            max="30"
+                            step="1"
+                            ng-class="{'invalid': registrationForm.userAge.$touched && registrationForm.userAge.$invalid}"
+                            placeholder="Enter your age"
+                            required
+                        >
+
+                        <div class="error-message"
+                             ng-show="registrationForm.userAge.$touched && registrationForm.userAge.$error.required">
+                            Age is required.
+                        </div>
+                        <div class="error-message"
+                             ng-show="registrationForm.userAge.$touched && (registrationForm.userAge.$error.min || registrationForm.userAge.$error.max || registrationForm.userAge.$error.number || registrationForm.userAge.$error.step)">
+                            Age must be a whole number between 18 and 30.
+                        </div>
+
+                        <!-- Mobile Number -->
+                        <label for="userMobile">
+                            Mobile Number <span class="required">*</span>
+                        </label>
+                        <input
+                            id="userMobile"
+                            name="userMobile"
+                            type="tel"
+                            ng-model="user.mobile"
+                            ng-pattern="/^[0-9]{10}$/"
+                            maxlength="10"
+                            ng-class="{'invalid': registrationForm.userMobile.$touched && registrationForm.userMobile.$invalid}"
+                            placeholder="Enter 10-digit mobile number"
+                            required
+                        >
+
+                        <div class="error-message"
+                             ng-show="registrationForm.userMobile.$touched && registrationForm.userMobile.$error.required">
+                            Mobile number is required.
+                        </div>
+                        <div class="error-message"
+                             ng-show="registrationForm.userMobile.$touched && registrationForm.userMobile.$error.pattern">
+                            Mobile number must contain exactly 10 digits.
+                        </div>
+
+                        <!-- Email -->
+                        <label for="userEmail">
+                            Email <span class="required">*</span>
+                        </label>
+                        <input
+                            id="userEmail"
+                            name="userEmail"
+                            type="email"
+                            ng-model="user.email"
+                            ng-class="{'invalid': registrationForm.userEmail.$touched && registrationForm.userEmail.$invalid}"
+                            placeholder="example@email.com"
+                            required
+                        >
+
+                        <div class="error-message"
+                             ng-show="registrationForm.userEmail.$touched && registrationForm.userEmail.$error.required">
+                            Email is required.
+                        </div>
+                        <div class="error-message"
+                             ng-show="registrationForm.userEmail.$touched && registrationForm.userEmail.$error.email">
+                            Enter a valid email address.
+                        </div>
+
+                        <!-- Gender -->
+                        <label>
+                            Gender <span class="required">*</span>
+                        </label>
+
+                        <div class="gender-options">
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="gender"
+                                    ng-model="user.gender"
+                                    value="Male"
+                                    required
+                                >
+                                Male
+                            </label>
+
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="gender"
+                                    ng-model="user.gender"
+                                    value="Female"
+                                    required
+                                >
+                                Female
+                            </label>
+                        </div>
+
+                        <div class="error-message"
+                             ng-show="registrationForm.gender.$touched && registrationForm.gender.$error.required">
+                            Please select your gender.
+                        </div>
+
+                        <!-- State -->
+                        <label for="userState">
+                            State <span class="required">*</span>
+                        </label>
+                        <select
+                            id="userState"
+                            name="userState"
+                            ng-model="user.state"
+                            ng-class="{'invalid': registrationForm.userState.$touched && registrationForm.userState.$invalid}"
+                            required
+                        >
+                            <option value="">Select your state</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Telangana">Telangana</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Other">Other</option>
+                        </select>
+
+                        <div class="error-message"
+                             ng-show="registrationForm.userState.$touched && registrationForm.userState.$error.required">
+                            Please select your state.
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="form-actions">
+                            <button
+                                type="submit"
+                                class="button"
+                                ng-disabled="registrationForm.$invalid"
+                            >
+                                Submit Registration
+                            </button>
+                        </div>
+
+                        <div class="success-message" ng-if="registrationSuccess">
+                            <strong>Registration successful!</strong>
+                            <p>
+                                Welcome to Melody Beats,
+                                {{ registeredName }}!
+                            </p>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </script>
+
+    <!-- RED MUSIC PAGE -->
+    <script type="text/ng-template" id="red.html">
+
+        <section class="page-banner red-banner">
+            <div class="eyebrow">Power • Rhythm • Energy</div>
+            <h1>Rock Music</h1>
+            <p>Turn up the volume and feel the energy of the band.</p>
+        </section>
+
+        <section class="page-content">
+            <img class="page-image" src="band.jpg" alt="Rock Music Band">
+
+            <h2>The Power of Rock</h2>
+            <p>
+                Rock music brings together powerful instruments,
+                energetic rhythms and expressive performances.
+                It is a favourite style for audiences who enjoy
+                exciting live music.
+            </p>
+
+            <p>
+                At Melody Beats, we celebrate the creativity,
+                teamwork and passion that make every performance
+                memorable.
+            </p>
+
+            <div class="page-links">
+                <a href="#!/" class="button">Back to Home</a>
+                <a href="#!/green" class="button">Explore Acoustic</a>
+                <a href="#!/register" class="button">Join Us</a>
+            </div>
+        </section>
+
+    </script>
+
+    <!-- GREEN MUSIC PAGE -->
+    <script type="text/ng-template" id="green.html">
+
+        <section class="page-banner green-banner">
+            <div class="eyebrow">Melody • Harmony • Calm</div>
+            <h1>Acoustic Music</h1>
+            <p>Discover the beauty of instruments and simple melodies.</p>
+        </section>
+
+        <section class="page-content">
+            <img class="page-image" src="guitar.webp" alt="Acoustic Guitar">
+
+            <h2>Music From the Heart</h2>
+            <p>
+                Acoustic music highlights the natural sound of
+                instruments such as guitars. Its melodies can create
+                a peaceful and meaningful listening experience.
+            </p>
+
+            <p>
+                Our band appreciates the different ways music
+                expresses feelings, connects people and tells stories.
+            </p>
+
+            <div class="page-links">
+                <a href="#!/" class="button">Back to Home</a>
+                <a href="#!/red" class="button">Explore Rock</a>
+                <a href="#!/register" class="button">Join Us</a>
+            </div>
+        </section>
+
+    </script>
+
+    <!-- BLUE MUSIC PAGE -->
+    <script type="text/ng-template" id="blue.html">
+
+        <section class="page-banner blue-banner">
+            <div class="eyebrow">Live • Together • Unforgettable</div>
+            <h1>Live Concerts</h1>
+            <p>Celebrate music with the band and its audience.</p>
+        </section>
+
+        <section class="page-content">
+            <img class="page-image" src="concert.jpg" alt="Live Music Concert">
+
+            <h2>Experience the Live Sound</h2>
+            <p>
+                A live concert combines music, lighting, instruments
+                and audience energy to create a special experience.
+            </p>
+
+            <p>
+                Melody Beats celebrates the excitement of live
+                performances and the memories shared by music lovers.
+            </p>
+
+            <div class="page-links">
+                <a href="#!/" class="button">Back to Home</a>
+                <a href="#!/green" class="button">Explore Acoustic</a>
+                <a href="#!/register" class="button">Join Us</a>
+            </div>
+        </section>
+
+    </script>
+
+    <footer>
+        <a class="brand" href="#!/">♫ Melody Beats</a>
+        <p>Good Music. Great Memories. Unforgettable Moments.</p>
+        <p>Experiment 9 — Form Validation and Routing Using AngularJS</p>
+    </footer>
+
+    <!-- AngularJS Application and Routing -->
+    <script>
+        var app = angular.module("melodyBeatsApp", ["ngRoute"]);
+
+        // Configure routes for the single-page website.
+        app.config(function ($routeProvider) {
+            $routeProvider
+                .when("/", {
+                    templateUrl: "home.html"
+                })
+                .when("/register", {
+                    templateUrl: "register.html"
+                })
+                .when("/red", {
+                    templateUrl: "red.html"
+                })
+                .when("/green", {
+                    templateUrl: "green.html"
+                })
+                .when("/blue", {
+                    templateUrl: "blue.html"
+                })
+                .otherwise({
+                    redirectTo: "/"
+                });
+        });
+
+        // Registration form controller.
+        app.controller("RegistrationController", function ($scope) {
+
+            $scope.user = {};
+            $scope.registrationSuccess = false;
+            $scope.registeredName = "";
+
+            $scope.submitRegistration = function (form) {
+
+                if (form.$valid) {
+                    $scope.registeredName = $scope.user.name;
+                    $scope.registrationSuccess = true;
+                }
+            };
+        });
+    </script>
+
+</body>
+</html>
